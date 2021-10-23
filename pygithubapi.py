@@ -59,7 +59,7 @@ ALLOWED_METHODS = ["DELETE", "GET", "POST", "PUT"]
 URL = "https://api.github.com"
 NO_CONTENT = 204
 def pyGithubApiVersion():
-    return f"pyCryptoFile version : {__version__}"
+    return f"pygithubapi version : {__version__}"
 
 
 class GithubApi():

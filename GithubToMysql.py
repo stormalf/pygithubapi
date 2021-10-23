@@ -15,7 +15,7 @@ URL = "https://api.github.com"
 METHOD = "GET"
 
 def GithubToMysqlVersion():
-    return f"pyCryptoFile version : {__version__}"
+    return f"GithubToMysql version : {__version__}"
 
 def createUserTable():
     usertable = "create table user ( id int primary key auto_increment, \

@@ -54,7 +54,6 @@ def createTrafficTable():
     return traffictable
                 
 def createDatabase(connection_params):
-    print(connection_params)
     with mysql.connector.connect(**connection_params) as dbm:
         with dbm.cursor() as c:
             c.execute(createUserTable())
@@ -168,7 +167,6 @@ def main(args):
         #the result returned by Mysql is a tuple, needs to retrieve the first value : example (1,)
         tres = resultat[0]
         id = tres[0]
-        print(id)
         for clone in traffic['clones']:
             print(f"repo: {repo['name']}, timestamp : {clone['timestamp']}, count:  {clone['count']}, uniques: {clone['uniques']}")
             resultat = createTrafficRecord(connection_params, id, clone)

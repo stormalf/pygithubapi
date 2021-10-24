@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 from cryptography.fernet import Fernet
-#from base64 import encode
 import requests
 from json import loads as jsonload
 import argparse
@@ -12,45 +11,33 @@ import os
 pygithubapi.py is to be used by other python modules to automate github api usage.
 it could be called in command line.
 Examples : 
-
 List of repos :  without any parameters returns the result of "/users/{user}/repos"
     
     python3 pygithubapi.py
     [{'id': 999999999, 'node_id': 'ZZZwZZJlcZZzaZZvcnkzZZZwZZZyZzz=', 'name': 'ansible_modules_customs', 'full_name': 'stormalf/ansible_modules_customs',...}]
-
 Creating a hook : 
     
     POST /repos/{owner}/{repo}/hooks
     python3 pygithubapi.py -J github_hook.json -m POST -a /repos/stormalf/ansible_modules_customs/hooks
     {'type': 'Repository', 'id': 999999999, 'name': 'web', 'active': True, 'events': ['pull_request', 'push'], \
         'config': {'content_type': 'json', 'insecure_ssl': '0', 'url': 'https://example.com/webhook'}...
-
 Checking contexts
     
     PUT /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
     python3 pygithubapi.py -m PUT -a /repos/stormalf/ansible_modules_customs/branches/main/protection/required_status_checks/contexts
     {'message': 'Branch not protected', 'documentation_url': 'https://docs.github.com/rest/reference/repos#set-status-check-contexts'}
-
 Creating an environment: 
-
     PUT /repos/{owner}/{repo}/environments/{environment_name}    
     python3 pygithubapi.py -m PUT -a /repos/stormalf/ansible_modules_customs/environments/test
     {'id': 999999999, 'node_id': 'ZZ_kwZZZwZZZc9ZZsyZ', 'name': 'test',...}   
-
-
 Deleting an environment: 
-
     DELETE /repos/{owner}/{repo}/environments/{environment_name}
     python3 pygithubapi.py -m DELETE -a /repos/stormalf/ansible_modules_customs/environments/test
     {}
-
-
 List of forks: 
-
     GET /repos/{owner}/{repo}/forks  
     python3 pygithubapi.py -a /repos/stormalf/ansible_modules_customs/forks
     []
-
 '''
 
 __version__ = "1.0.0"
@@ -104,12 +91,12 @@ class GithubApi():
         return response       
 
 
-    #call private function depending the authentication method defined, basic is the default
+    #call private function
     def githubAuthentication(self):
         response = self.__githubTokenAuth()
         return response
 
-    #internal function that formats the url and calls the github apis using bearer/token authentication
+    #internal function that formats the url and calls the github apis
     def __githubTokenAuth(self):
         apiurl = self.url + self.api  
         header = {}

@@ -118,6 +118,11 @@ def createTrafficRecord(connection_params, idrepo, clone):
                 dbm.commit()
                 c.execute(f"select idrepo, ts from traffic where idrepo = {idrepo} and ts = '{clone['timestamp']}'")
                 resultat = c.fetchall()
+            #update because in the current day the count can be different
+            else:
+                c.execute(f"update traffic set count = {clone['count']}, uniques = {clone['uniques']} where \
+                    idrepo = {idrepo} and ts = '{clone['timestamp']}'")
+                dbm.commit()
     return resultat      
 
 def queryRepoClone(connection_params):

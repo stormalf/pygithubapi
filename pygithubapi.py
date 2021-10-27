@@ -40,7 +40,7 @@ List of forks:
     []
 '''
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 
 ALLOWED_METHODS = ["DELETE", "GET", "POST", "PUT"]
 URL = "https://api.github.com"
@@ -108,7 +108,6 @@ class GithubApi():
 
     #internal function that calls the requests
     def __githubDispatch(self, apiurl, header):
-        response = "{}"        
         try:
             if self.method == "POST":
                 contents = open(self.json, 'rb')
@@ -125,14 +124,13 @@ class GithubApi():
                     contents.close()
             elif self.method == "DELETE":
                 response = requests.delete(apiurl, headers=header)  
+            try:                
+                response = response.json()                
+            except:
+                response = "{}"                
         except requests.exceptions.RequestException as e:  
             raise SystemExit(e)   
-        if response.status_code == NO_CONTENT:
-            response = "{}"
-        else:            
-            response = response.json()
         return response
-
 def pygithubapi(args):
     message = ''
     if args.user == '':

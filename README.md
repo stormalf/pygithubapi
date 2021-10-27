@@ -65,3 +65,5 @@ Note that Mysql user and Mysql password are passed by environment variable for n
 1.0.1 fixing issue with wrong json dependency for pypi
 
 1.0.2 fixing issue with UnboundLocalError: local variable 'response' referenced before assignment
+
+1.03 fixing issue with response.json()

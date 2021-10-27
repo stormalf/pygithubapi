@@ -40,7 +40,7 @@ List of forks:
     []
 '''
 
-__version__ = "1.0.0"
+__version__ = "1.0.2"
 
 ALLOWED_METHODS = ["DELETE", "GET", "POST", "PUT"]
 URL = "https://api.github.com"
@@ -108,6 +108,7 @@ class GithubApi():
 
     #internal function that calls the requests
     def __githubDispatch(self, apiurl, header):
+        response = "{}"        
         try:
             if self.method == "POST":
                 contents = open(self.json, 'rb')

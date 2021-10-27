@@ -173,9 +173,9 @@ def main(args):
         tres = resultat[0]
         id = tres[0]
         for clone in traffic['clones']:
-            print(f"repo: {repo['name']}, timestamp : {clone['timestamp']}, count:  {clone['count']}, uniques: {clone['uniques']}")
+            #print(f"repo: {repo['name']}, timestamp : {clone['timestamp']}, count:  {clone['count']}, uniques: {clone['uniques']}")
             resultat = createTrafficRecord(connection_params, id, clone)
-            print(resultat)
+            #print(resultat)
 
     queryRepoClone(connection_params)            
 

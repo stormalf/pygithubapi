@@ -4,7 +4,7 @@ import os
 from pygithubapi import GithubApi
 import mysql.connector
 import argparse
-from datetime import date
+from datetime import date, timedelta
 
 __version__ = "1.0.0"
 
@@ -18,12 +18,14 @@ METHOD = "GET"
 def GithubToMysqlVersion():
     return f"GithubToMysql version : {__version__}"
 
+#not really use for the moment
 def createUserTable():
     usertable = "create table user ( id int primary key auto_increment, \
         name varchar(100) not null, \
         creation_date DATETIME DEFAULT CURRENT_TIMESTAMP) engine=innoDB;"
     return usertable
 
+#contains all repos (private and public)
 def createRepoTable():
     repotable = "create table repository ( id int primary key auto_increment, \
         name varchar(100) not null, \
@@ -43,6 +45,7 @@ def createRepoTable():
         creation_date DATETIME DEFAULT CURRENT_TIMESTAMP) engine=innoDB;"
     return repotable
         
+#contains some traffic information to history
 def createTrafficTable():
     traffictable = "create table traffic ( idrepo int, \
         ts varchar(20), \
@@ -54,6 +57,7 @@ def createTrafficTable():
         creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,  PRIMARY KEY(idrepo, ts) ) engine=innoDB;"
     return traffictable
                 
+#create tables into the database that should be created manually before running it
 def createDatabase(connection_params):
     with mysql.connector.connect(**connection_params) as dbm:
         with dbm.cursor() as c:
@@ -62,6 +66,7 @@ def createDatabase(connection_params):
             c.execute(createTrafficTable())
             dbm.commit()
 
+#create a user if it doesn't exist yet
 def createUserRecord(connection_params, user):
     with mysql.connector.connect(**connection_params) as dbm:
         with dbm.cursor() as c:
@@ -71,6 +76,7 @@ def createUserRecord(connection_params, user):
                 c.execute(f"insert into user (name) values('{user}')")
                 dbm.commit()
 
+#create a repository if it doesn't exist yet
 def createRepoRecord(connection_params, _repo):
     repo = _repo['name']
     full_name = _repo['full_name']
@@ -108,9 +114,10 @@ def createRepoRecord(connection_params, _repo):
                 id = c.fetchall()
     return id              
 
+#create a traffic record if it doesn't exist yet and update only the current day and the previous day. The job is forecast to run each day
 def createTrafficRecord(connection_params, idrepo, clone):
     with mysql.connector.connect(**connection_params) as dbm:
-        now = str(date.today()) + "T00:00:00Z"
+        now = str(date.today() - timedelta(days=1) ) + "T00:00:00Z"
         with dbm.cursor() as c:
             c.execute(f"select idrepo, ts from traffic where idrepo = '{idrepo}' and ts = '{clone['timestamp']}'")
             resultat = c.fetchall()
@@ -123,10 +130,11 @@ def createTrafficRecord(connection_params, idrepo, clone):
             #update because in the current day the count can be different
             else:
                 c.execute(f"update traffic set count = {clone['count']}, uniques = {clone['uniques']} where \
-                    idrepo = {idrepo} and ts = '{now}'")
+                    idrepo = {idrepo} and ts >= '{now}'")
                 dbm.commit()
     return resultat      
 
+#display all repo that have traffic by descending value
 def queryRepoClone(connection_params):
     with mysql.connector.connect(**connection_params) as dbm:
         with dbm.cursor() as c:
@@ -136,6 +144,7 @@ def queryRepoClone(connection_params):
             for repo in resultat:
                 print(repo)
 
+#check and run
 def main(args):
     #filling the empty parameters with default values
     if args.token == '':

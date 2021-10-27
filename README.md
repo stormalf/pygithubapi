@@ -57,3 +57,11 @@ Note that Mysql user and Mysql password are passed by environment variable for n
 
     - working with no sql database like elasticsearch
     - automating the export to grafana using pygrafanaapi
+
+## release notes
+
+1.0.0 initial version
+
+1.0.1 fixing issue with wrong json dependency for pypi
+
+1.0.2 fixing issue with UnboundLocalError: local variable 'response' referenced before assignment

@@ -131,6 +131,8 @@ class GithubApi():
         except requests.exceptions.RequestException as e:  
             raise SystemExit(e)   
         return response
+
+        
 def pygithubapi(args):
     message = ''
     if args.user == '':

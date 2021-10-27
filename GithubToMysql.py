@@ -4,6 +4,7 @@ import os
 from pygithubapi import GithubApi
 import mysql.connector
 import argparse
+from datetime import date
 
 __version__ = "1.0.0"
 
@@ -109,6 +110,7 @@ def createRepoRecord(connection_params, _repo):
 
 def createTrafficRecord(connection_params, idrepo, clone):
     with mysql.connector.connect(**connection_params) as dbm:
+        now = str(date.today()) + "T00:00:00Z"
         with dbm.cursor() as c:
             c.execute(f"select idrepo, ts from traffic where idrepo = '{idrepo}' and ts = '{clone['timestamp']}'")
             resultat = c.fetchall()
@@ -121,7 +123,7 @@ def createTrafficRecord(connection_params, idrepo, clone):
             #update because in the current day the count can be different
             else:
                 c.execute(f"update traffic set count = {clone['count']}, uniques = {clone['uniques']} where \
-                    idrepo = {idrepo} and ts = '{clone['timestamp']}'")
+                    idrepo = {idrepo} and ts = '{now}'")
                 dbm.commit()
     return resultat      
 
@@ -160,7 +162,7 @@ def main(args):
     #github api to retrieve list of repos with all information
     api=f"/users/{user}/repos"
     message= GithubApi.runGithubApi(api=api, method=METHOD, url=iurl, user=user, token=itoken, json = "") 
-    print(message)
+    #print(message)
     if args.create == "yes":
         createDatabase(connection_params)
     createUserRecord(connection_params, user)

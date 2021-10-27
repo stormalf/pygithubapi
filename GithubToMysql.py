@@ -151,7 +151,13 @@ def main(args):
     else:
         user = args.user                                   
     mysql_user = os.environ.get("MYSQL_USER")
+    if mysql_user == None:
+        print("environment variable MYSQL_USER missing!")
+        return
     mysql_pwd = os.environ.get("MYSQL_PASSWORD")
+    if mysql_pwd == None:
+        print("environment variable MYSQL_PASSWORD missing!")
+        return
     connection_params = {
         'host': f'{HOST}',
         'port': PORT,

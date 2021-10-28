@@ -45,6 +45,7 @@ __version__ = "1.0.3"
 ALLOWED_METHODS = ["DELETE", "GET", "POST", "PUT"]
 URL = "https://api.github.com"
 NO_CONTENT = 204
+
 def pyGithubApiVersion():
     return f"pygithubapi version : {__version__}"
 
@@ -132,7 +133,7 @@ class GithubApi():
             raise SystemExit(e)   
         return response
 
-        
+
 def pygithubapi(args):
     message = ''
     if args.user == '':

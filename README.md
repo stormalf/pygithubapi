@@ -60,10 +60,18 @@ Note that Mysql user and Mysql password are passed by environment variable for n
 
 ## release notes
 
+pygithubapi.py
+
 1.0.0 initial version
 
 1.0.1 fixing issue with wrong json dependency for pypi
 
 1.0.2 fixing issue with UnboundLocalError: local variable 'response' referenced before assignment
 
-1.03 fixing issue with response.json()
+1.0.3 fixing issue with response.json()
+
+GithubToMysql.api
+
+1.0.1 the github's oldest traffic day has the data changed. I don't know exactly why. Example you retrieved 6 clones the 15th and when this day become the oldest in the traffic dashboard the clone number changed to a minor value like if some clones are removed depending the hour in the day ?
+
+1.0.2 deciding to update only if the new count is greater than the oldest

@@ -6,7 +6,7 @@ import mysql.connector
 import argparse
 from datetime import date, timedelta
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 
 DB = "github"
@@ -130,7 +130,7 @@ def createTrafficRecord(connection_params, idrepo, clone):
             #update because in the current day the count can be different
             else:
                 c.execute(f"update traffic set count = {clone['count']}, uniques = {clone['uniques']} where \
-                    idrepo = {idrepo} and ts = '{clone['timestamp']}'")
+                    idrepo = {idrepo} and ts = '{clone['timestamp']}' and count < {clone['count']}")
                 dbm.commit()
     return resultat      
 
@@ -189,11 +189,11 @@ def main(args):
         #the result returned by Mysql is a tuple, needs to retrieve the first value : example (1,)
         tres = resultat[0]
         id = tres[0]
-        limit = str(date.today() - timedelta(days=12) ) + "T00:00:00Z"        
+        #limit = str(date.today() - timedelta(days=12) ) + "T00:00:00Z"        
         for clone in traffic['clones']:
-            if clone['timestamp'] >= limit:
-                print(f"{id}, repo: {repo['name']}, timestamp : {clone['timestamp']}, count:  {clone['count']}, uniques: {clone['uniques']}")
-                resultat = createTrafficRecord(connection_params, id, clone)
+            #if clone['timestamp'] >= limit:
+            print(f"{id}, repo: {repo['name']}, timestamp : {clone['timestamp']}, count:  {clone['count']}, uniques: {clone['uniques']}")
+            resultat = createTrafficRecord(connection_params, id, clone)
                 #print(resultat)
 
     queryRepoClone(connection_params)            

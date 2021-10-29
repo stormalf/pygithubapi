@@ -117,7 +117,7 @@ def createRepoRecord(connection_params, _repo):
 #create a traffic record if it doesn't exist yet and update otherwise
 def createTrafficRecord(connection_params, idrepo, clone):
     with mysql.connector.connect(**connection_params) as dbm:
-        #now = str(date.today() - timedelta(days=2) ) + "T00:00:00Z"
+        #now = str(date.today() - timedelta(days=12) ) + "T00:00:00Z"
         with dbm.cursor() as c:
             c.execute(f"select idrepo, ts from traffic where idrepo = '{idrepo}' and ts = '{clone['timestamp']}'")
             resultat = c.fetchall()
@@ -189,10 +189,12 @@ def main(args):
         #the result returned by Mysql is a tuple, needs to retrieve the first value : example (1,)
         tres = resultat[0]
         id = tres[0]
+        limit = str(date.today() - timedelta(days=12) ) + "T00:00:00Z"        
         for clone in traffic['clones']:
-            print(f"repo: {repo['name']}, timestamp : {clone['timestamp']}, count:  {clone['count']}, uniques: {clone['uniques']}")
-            resultat = createTrafficRecord(connection_params, id, clone)
-            #print(resultat)
+            if clone['timestamp'] >= limit:
+                print(f"{id}, repo: {repo['name']}, timestamp : {clone['timestamp']}, count:  {clone['count']}, uniques: {clone['uniques']}")
+                resultat = createTrafficRecord(connection_params, id, clone)
+                #print(resultat)
 
     queryRepoClone(connection_params)            
 

@@ -6,7 +6,7 @@ import mysql.connector
 import argparse
 from datetime import date, timedelta
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 
 DB = "github"
